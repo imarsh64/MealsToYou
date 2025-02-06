@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import Home from "./pages/Home.js";
 
 function App(){
 
@@ -14,17 +16,26 @@ function App(){
         })
     }, [])
     return(
-        <div>
-            {(typeof data.hi === "undefined") ? (
-                <p>Loading...</p>
-            ) : (
-                data.hi.map((piece, i) =>(
-                    <p key={i}>{piece}</p>
-                ))
-            )}
+        <Router>
+            <Routes>
+                {/* Home Page Route */}
+                <Route path="/" element={<Home />} />
 
-
-        </div>
+                {/* Data Fetching Page */}
+                <Route
+                    path="/data"
+                    element={
+                        <div>
+                            {typeof data.hi === "undefined" ? (
+                                <p>Loading...</p>
+                            ) : (
+                                data.hi.map((piece, i) => <p key={i}>{piece}</p>)
+                            )}
+                        </div>
+                    }
+                />
+            </Routes>
+        </Router>
     )
 }
 
