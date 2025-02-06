@@ -1,4 +1,4 @@
 .idea/
 ./client/node_modules/
-./.idea
-./flask_server/.idea
+./.idea/
+./flask_server/.idea/
