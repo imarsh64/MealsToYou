@@ -1,0 +1,4 @@
+To run the server:
+Run server.py, this is backend APIs
+Open client folder, run npm start
+you may need to install packages to this folder
