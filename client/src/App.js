@@ -21,6 +21,12 @@ function App(){
                 {/* Home Page Route */}
                 <Route path="/" element={<Home />} />
 
+                {/* Profile Page Route */}
+                <Route path="/Profile" element={<Home />} />
+
+                {/* Settings Page Route */}
+                <Route path="/Settings" element={<Home />} />
+
                 {/* Data Fetching Page */}
                 <Route
                     path="/data"
