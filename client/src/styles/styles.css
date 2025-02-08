@@ -1,0 +1,25 @@
+:root {
+  --primary-color: #026C1E;
+  --secondary-color: #E9E3D5;
+  --background-color: #FFF8E9;
+  --main-words-color: white;
+}
+
+/* Global Styles */
+body {
+  font-family: "Arial", sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+
+/* Text Styling */
+h1, h2, h3 {
+  color: var(--primary-color);
+}
+
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
