@@ -1,17 +1,19 @@
-/* Sidebar styles */
 .sidebar {
     position: fixed;
     top: 8vh;
-    left: -250px; /* Start off-screen */
-    width: 250px;
+    width: 150px;
+    /*width: 15vw;
+    min-width: 150px;
+    max-width: 300px; */
+    left: -300px;
     height: 100%;
-    background-color: #333;
-    transition: left 0.3s ease-in-out; /* Smooth transition */
+    background-color: var(--secondary-color);
+    transition: left 0.3s ease-in-out;
     padding-top: 50px;
 }
 
 .sidebar.open {
-    left: 0; /* Slide in */
+    left: 0;
 }
 
 .sidebar ul {
@@ -25,10 +27,10 @@
 }
 
 .sidebar a {
-    color: white;
-    text-decoration: none;
+    color: var(--primary-color);
+    font-size: 1.5rem;
 }
 
 .sidebar a:hover {
-    background-color: #555;
+    color: black;
 }

@@ -12,8 +12,8 @@ const Home = () => {
         <div>
             <Header onToggleSidebar={toggleSidebar}/>
             <Sidebar isOpen={isSidebarOpen} />
-            <main>
-                <h1>This is the homepage</h1>
+            <main className={isSidebarOpen ? "sidebar-open" : ""}>
+                <h1>Welcome to the homepage</h1>
             </main>
         </div>
     );
