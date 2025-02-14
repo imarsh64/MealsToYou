@@ -2,3 +2,4 @@
 client/node_modules/
 ./.idea/
 flask_server/.idea/
+flask_server/.env
