@@ -1,0 +1,35 @@
+/* Global Colors & Styles*/
+:root {
+    --primary-color: #026C1E;
+    --secondary-color: #E9E3D5;
+    --background-color: #FFF8E9;
+    --main-words-color: white;
+}
+
+body {
+    font-family: "Arial", sans-serif;
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
+}
+
+h1{
+    color: var(--primary-color);
+    font-size: 4rem;
+}
+
+/* Move main content when sidebar opens*/
+main {
+    transition: margin-left 0.3s ease;
+    margin-left: 0;
+    display: flex;
+    justify-content: center;
+}
+
+main.sidebar-open {
+    margin-left: 150px;
+}
+
+a {
+    text-decoration: none;
+}
