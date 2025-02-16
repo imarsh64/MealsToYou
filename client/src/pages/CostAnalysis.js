@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 
 
-const Home = () => {
+const Cost = () => {
 
     const [miles, setMiles] = useState(0)
     const [fuelCost, setFuelCost] = useState(0)
@@ -66,4 +66,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default Cost;

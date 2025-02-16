@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.js";
+import Cost from "./pages/CostAnalysis"
 
 function App(){
 
@@ -18,6 +19,8 @@ function App(){
     return(
         <Router>
             <Routes>
+
+                <Route path="/Cost" element={<Cost />} />
                 {/* Home Page Route */}
                 <Route path="/" element={<Home />} />
 
