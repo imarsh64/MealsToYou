@@ -1,0 +1,36 @@
+.sidebar {
+    position: fixed;
+    top: 8vh;
+    width: 150px;
+    /*width: 15vw;
+    min-width: 150px;
+    max-width: 300px; */
+    left: -300px;
+    height: 100%;
+    background-color: var(--secondary-color);
+    transition: left 0.3s ease-in-out;
+    padding-top: 50px;
+}
+
+.sidebar.open {
+    left: 0;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+}
+
+.sidebar li {
+    padding: 10px;
+    text-align: center;
+}
+
+.sidebar a {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+}
+
+.sidebar a:hover {
+    color: black;
+}
