@@ -6,6 +6,7 @@ function Sidebar({isOpen}) {
         <nav className={`sidebar ${isOpen ? "open" : ""}`}>
             <ul>
                 <li><a href="/">Home</a></li>
+                <li><a href="/NewData">New Data</a></li>
                 <li><a href="/Profile">Profile</a></li>
                 <li><a href="/Settings">Settings</a></li>
             </ul>

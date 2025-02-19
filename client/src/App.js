@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.js";
+import NewData from './pages/NewData.js';
 
 function App(){
 
@@ -20,6 +21,9 @@ function App(){
             <Routes>
                 {/* Home Page Route */}
                 <Route path="/" element={<Home />} />
+                
+                {/* New Address Route */}
+                <Route path="/NewData" element={<NewData />} />
 
                 {/* Profile Page Route */}
                 <Route path="/Profile" element={<Home />} />
