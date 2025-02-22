@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 
 app = Flask(__name__)
 
@@ -6,11 +6,17 @@ app = Flask(__name__)
 def hi():
     return {"hi": ["howdy","helloge!"]}
 
-@app.route("/login")
+@app.route("/login", methods = ['POST'])
 def login():
     #future functionality: receives username/psw, chcks against db
     #if can find corresponding data, return a true
-    return {True}
+    content = request.get_json()
+    uname = content.get('username')
+    pword = content.get('password')
+    #use these for something
+    print(uname, pword)
+    response = True
+    return jsonify({"data": response})
 
 
 if __name__ == "__main__":

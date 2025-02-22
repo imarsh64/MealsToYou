@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.js";
-import Cost from "./pages/CostAnalysis"
-
+import Cost from "./pages/CostAnalysis.js"
+import Login from "./pages/Login.js"
 function App(){
 
     const [data, setData] = useState([{}])
@@ -19,8 +19,12 @@ function App(){
     return(
         <Router>
             <Routes>
-
+                {/* Cot Analysis Route*/}
                 <Route path="/Cost" element={<Cost />} />
+
+                {/* Login page route */}
+                <Route path="/Login" element={<Login />} />
+
                 {/* Home Page Route */}
                 <Route path="/" element={<Home />} />
 
