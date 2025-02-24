@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home.js";
 import Cost from "./pages/CostAnalysis.js"
 import Login from "./pages/Login.js"
+import AddAddress from "./pages/AddAddress";
 function App(){
 
     const [data, setData] = useState([{}])
@@ -24,6 +25,9 @@ function App(){
 
                 {/* Login page route */}
                 <Route path="/Login" element={<Login />} />
+
+                {/* Add Addrs page route */}
+                <Route path="/Address" element={<AddAddress />} />
 
                 {/* Home Page Route */}
                 <Route path="/" element={<Home />} />

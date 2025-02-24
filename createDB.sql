@@ -1,4 +1,5 @@
 
+
 CREATE TABLE district (
     id SERIAL PRIMARY KEY,
     district_name VARCHAR(255) NOT NULL
