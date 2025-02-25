@@ -50,7 +50,7 @@ const AddAddress = () => {
         let newRows = []
         for(let i = 0; i < e.length; i++){
             let row = e[i]
-            //TODO: replace ditr number with call for distr name
+            //TODO: replace distr number with call for distr name
             newRows.push({id: row[0], district: row[1], street: row[2], city: row[3], zip: row[4], adState: row[5]})
         }
         setAddresses(newRows)
@@ -68,7 +68,7 @@ const AddAddress = () => {
     }
 
     function fetchAddr() {
-        //currntly scuffed fetching from localhost, add environment variables with where to go later
+        //currently scuffed fetching from localhost, add environment variables with where to go later
         fetch("/get_addr",
             {
                 method: 'POST',
@@ -79,7 +79,6 @@ const AddAddress = () => {
 
             }).then(resp  => resp.json())
             .then(result=>{
-                //Currently, this api ALWAYS returns true bc it has nothing better to do
                 console.log(result.data)
                 formatAddr(result.data)
             });
