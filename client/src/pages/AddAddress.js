@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Header from '../components/header.js';
 import Sidebar from "../components/sidebar";
+import "../styles/addAddress.css";
 import { DataGrid , GridColDef } from '@mui/x-data-grid';
 
 const AddAddress = () => {
@@ -95,6 +96,19 @@ const AddAddress = () => {
                 <div>
                     <button onClick={fetchAddr}> Test </button>
                     <button onClick={submitAddr}> Enter </button>
+                </div>
+                <div>
+                    <form>
+                        <label htmlFor="street">Street</label>
+                        <input type="text" id="street" name="street" />
+                        <label htmlFor="zip">Zip</label>
+                        <input type="text" id="zip" name="zip" />
+                        <label htmlFor="state">State</label>
+                        <input type="text" id="state" name="state" />
+                        <label htmlFor="district">District</label>
+                        <input type="text" id="district" name="district" />
+                        <input type="submit" value="Submit" />
+                    </form>
                 </div>
                 <div>
                 <DataGrid
