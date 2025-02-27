@@ -1,32 +1,55 @@
 main {
-    display: flex; /* Ensures elements inside main are laid out in a column */
+    display: flex; 
     flex-direction: column;
-    align-items: flex-start; /* Aligns elements to the left */
+    align-items: center;
+    justify-content: center; 
     padding: 2vw;
 }
 
 form {
     display: flex;
-    gap: 10px;
-    max-width: 300px;
+    flex-wrap: wrap;
+    gap: 15px; 
+    width: 100%; 
+    max-width: 750px; 
+    justify-content: center;
 }
 
-input[type="text"] {
-    padding: 8px;
+
+label {
+    font-size: 1rem;  /* Set the font size */
+    font-weight: bold; /* Make the text bold */
+    margin-top: 5px; /* Add space between label and input field */
+    display: block;  /* Make labels block-level elements to ensure they are on separate lines */
+    color: black;  /* Change label text color */
+}
+/*
+input[type="text"], select {
+    width: 100%; 
+    padding: 8px; 
+    margin-bottom: 12px; 
     border: 1px solid #ccc;
     border-radius: 4px;
 }
+*/
 
-input[type="submit"] {
+input[type="text"], select {
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+}
+
+button[type="submit"] {
     padding: 10px;
+    margin-bottom: 1vh;
     background-color: var(--primary-color);
     color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 10px;
     cursor: pointer;
 }
 
-input[type="submit"]:hover {
+button[type="submit"]:hover {
     background-color: black;
 }
 
