@@ -6,11 +6,11 @@ app = Flask(__name__)
 
 
 mydb = mysql.connector.connect(
-  host="127.0.0.1",
-  port="3307",
-  database="mydatabase",
-  user="root",
-  password= ""#filler
+  host="",
+  port="",
+  database="",
+  user="",
+  password= ""
 )
 
 
@@ -43,7 +43,7 @@ def get_addr():
     #district = 1
     #print(district)
     cursor = mydb.cursor()
-    cursor.execute("SELECT * FROM address WHERE district=" + str(district))
+    cursor.execute("""SELECT * FROM address WHERE district=%s""", [str(district)])
     result = cursor.fetchall()
     #print(result)
     return jsonify({"data": result})
@@ -62,9 +62,7 @@ def upload_addr():
     address_state = content.get("state")
     #data validation, throw error if empty fields
     cursor = mydb.cursor()
-    cursor.execute("INSERT INTO address (district, street, city, zipcode, address_state) VALUES " +
-                   "( " + str(district) + ", \'" + street + "\', \'" + city + "\',\'" + zipcode
-                   + "\', \'" + address_state + "\')")
+    cursor.execute("""INSERT INTO address (district, street, city, zipcode, address_state) VALUES (%s, %s, %s, %s, %s)""", [str(district),street,city,zipcode,address_state])
     mydb.commit()
     response = 1
     #TODO: if any errors, return 0

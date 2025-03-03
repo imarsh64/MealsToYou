@@ -9,12 +9,14 @@ const AddAddress = () => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [addresses, setAddresses] = useState([])
-    const [district, setDistrict] = useState(1);
+    const [district, setDistrict] = useState(0);
     const [street, setStreet] = useState("");
     const [city, setCity] = useState("");
     const [zip, setZip] = useState("");
     const [adState, setAdState] = useState("");
 
+
+    let oldDistr = -1;
     const districts = [1, 2, 3, 4, 5];
     const states = ["TX", "LA", "OK", "NM"];
 
@@ -48,7 +50,12 @@ const AddAddress = () => {
             width: 100
         },
     ];
-
+    useEffect(() => {
+        if(oldDistr !== district) {
+            fetchAddr()
+            oldDistr = district
+        }
+    }, [district]);
 
     function formatAddr(e){
         let newRows = []
@@ -78,35 +85,18 @@ const AddAddress = () => {
     
             if (!response.ok) throw new Error("Failed to upload address");
     
-            fetchAddr(); 
+            fetchAddr();
         } catch (error) {
             console.error("Error submitting address:", error);
         }
     }
 
-<<<<<<< HEAD
-    function fetchAddr() {
-        //currently scuffed fetching from localhost, add environment variables with where to go later
-        fetch("/get_addr",
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({district: district})
-
-            }).then(resp  => resp.json())
-            .then(result=>{
-                console.log(result.data)
-                formatAddr(result.data)
-=======
     async function fetchAddr() {
         try {
             const response = await fetch("/get_addr", {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ district })
->>>>>>> origin/add_data
             });
         
             if (!response.ok) throw new Error("Failed to fetch addresses");
