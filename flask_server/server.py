@@ -7,7 +7,8 @@ app = Flask(__name__)
 
 mydb = mysql.connector.connect(
   host="127.0.0.1",
-  database="capstone_db",
+  port="3307",
+  database="mydatabase",
   user="root",
   password= ""#filler
 )
