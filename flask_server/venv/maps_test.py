@@ -1,6 +1,7 @@
 import unittest
 import pandas as pd
 
+from flask_server.db import connect_db, test_db
 from flask_server.maps import get_osrm_route
 
 
@@ -20,6 +21,12 @@ class MyTestCase(unittest.TestCase):
         ]
 
         print(get_osrm_route(coordinates))
+
+    def test_db(self):
+        connect_db()
+        test_db()
+        # assert 1 == 2
+
 
 if __name__ == '__main__':
     unittest.main()
