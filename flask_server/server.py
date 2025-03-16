@@ -2,7 +2,7 @@ import mysql
 import mysql.connector
 from flask import Flask
 
-from flask_server.maps import get_osrm_route, generate_google_maps_link
+from flask_server.maps import generate_google_maps_link
 from flask_server.tsp import make_distance_matrix, genetic_tsp
 
 app = Flask(__name__)
