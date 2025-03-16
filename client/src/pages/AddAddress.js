@@ -9,11 +9,14 @@ const AddAddress = () => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [addresses, setAddresses] = useState([])
-    const [district, setDistrict] = useState(1);
+    const [district, setDistrict] = useState();
     const [street, setStreet] = useState("");
     const [city, setCity] = useState("");
     const [zip, setZip] = useState("");
     const [adState, setAdState] = useState("");
+    const [file, setFile] = useState("No file chosen");
+    const [fileData, setFileData] = useState(null);
+
 
     const districts = [1, 2, 3, 4, 5];
     const states = ["TX", "LA", "OK", "NM"];
@@ -109,6 +112,133 @@ const AddAddress = () => {
         fetchAddr(); 
     }, []);
 
+
+    const handleFileChange = (event) => {
+        //setFile(event.target.files[0]);
+        const selectedFile = event.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const content = e.target.result;
+                setFileData(content); // Store the CSV content
+            };
+        reader.readAsText(selectedFile);
+        }
+    };
+
+    /*
+    const handleFileSubmit = () => {
+        if (!file) {
+          console.error("No file selected.");
+          return;
+        }
+        pCSV(file);
+    };*/
+
+    /*
+    const handleFileSubmit = (event) => {
+        event.preventDefault();
+        if (fileData) {
+          console.log("CSV File Contents:");
+          console.log(fileData);
+          
+        } else {
+          console.log("No file uploaded or file is empty.");
+        }
+    };*/
+
+
+    const handleFileSubmit = async (event) => {
+        event.preventDefault();
+        
+        if (!fileData) {
+            console.log("No file uploaded or file is empty.");
+            return;
+        }
+    
+        // Split fileData into rows and remove empty lines
+        const rows = fileData.split("\n").map(row => row.split(",").map(item => item.trim())).filter(row => row.length >= 5);
+    
+        console.log("Parsed CSV Data:", rows);
+    
+        // Skip the header row and process each address
+        for (let i = 1; i < rows.length; i++) {
+            const [district, street, city, zip, state] = rows[i];
+    
+            if (!district || !street || !city || !zip || !state || !/^\d{5}$/.test(zip)) {
+                console.warn(`Skipping invalid row at index ${i}:`, rows[i]);
+                continue;
+            }
+    
+            try {
+                const response = await fetch("/upload_addr", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        district: Number(district), 
+                        street, 
+                        city, 
+                        zip, 
+                        state 
+                    })
+                });
+    
+                if (!response.ok) throw new Error(`Failed to upload row ${i}`);
+    
+                console.log(`Successfully uploaded row ${i}:`, rows[i]);
+            } catch (error) {
+                console.error(`Error uploading row ${i}:`, error);
+            }
+        }
+    
+        // Refresh addresses after upload
+        fetchAddr();
+    };
+    
+
+      
+      const pCSV = (file) => {
+        const reader = new FileReader();
+    
+        reader.onload = async ({ target }) => {
+            const csvData = target.result;
+            const rows = csvData.split("\n").map((row) => row.split(","));
+    
+            console.log("Raw CSV Rows:", rows); // Display the initial rows array
+    
+            // Skip the header row (first row)
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+    
+                // Skip empty rows or rows with missing data
+                if (!row || row.length < 5) {
+                    console.warn("Skipping row due to missing or incomplete data:", rows[i]);
+                    continue;
+                }
+    
+                const [district, street, city, zip, state] = row.map(item => item.trim()); // Trim whitespace
+    
+                // Display the parsed data for each row
+                console.log(`Row ${i}:`);
+                console.log(`  District: ${district}`);
+                console.log(`  Street: ${street}`);
+                console.log(`  City: ${city}`);
+                console.log(`  Zip: ${zip}`);
+                console.log(`  State: ${state}`);
+                console.log("--------------------");
+            }
+    
+            console.log("CSV parsing process completed.");
+        };
+    
+        reader.readAsText(file);
+    };
+
+
+
+
     return (
         <div>
             <Header onToggleSidebar={toggleSidebar}/>
@@ -143,6 +273,13 @@ const AddAddress = () => {
                         </select>
                         
                         <button type="submit">Submit</button>
+                    </form>
+                </div>
+
+                <div>
+                    <form id="upload-form" onSubmit={handleFileSubmit}>
+                        <input type="file" accept=".csv" onChange={handleFileChange}/>
+                        <button type="submit" disabled={!file}>Upload CSV</button>
                     </form>
                 </div>
 
