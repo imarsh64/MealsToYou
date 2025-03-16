@@ -6,11 +6,11 @@ app = Flask(__name__)
 
 
 mydb = mysql.connector.connect(
-  host="127.0.0.1",
-  port="3307",
-  database="mydatabase",
-  user="root",
-  password="chas"
+  host="",
+  port="",
+  database="",
+  user="",
+  password= ""
 )
 
 
@@ -37,16 +37,15 @@ def login():
 
 @app.route("/get_addr", methods = ['POST'])
 def get_addr():
-    #get lit of addresses based on district
+    #get list of addresses based on district
     #parse
     district = request.get_json().get("district")
-
-    district = 1
-    print(district)
+    #district = 1
+    #print(district)
     cursor = mydb.cursor()
-    cursor.execute("SELECT * FROM address WHERE district=" + str(district))
+    cursor.execute("""SELECT * FROM address WHERE district=%s""", [str(district)])
     result = cursor.fetchall()
-    print(result)
+    #print(result)
     return jsonify({"data": result})
 
 
@@ -54,7 +53,6 @@ def get_addr():
 def upload_addr():
     #submit an address to the DB
     #should we allow duplicates?
-
     #parse
     content = request.get_json()
     district = content.get("district")
@@ -63,11 +61,8 @@ def upload_addr():
     zipcode = content.get("zip")
     address_state = content.get("state")
     #data validation, throw error if empty fields
-
     cursor = mydb.cursor()
-    cursor.execute("INSERT INTO address (district, street, city, zipcode, address_state) VALUES " +
-                   "( " + str(district) + ", \'" + street + "\', \'" + city + "\',\'" + zipcode
-                   + "\', \'" + address_state + "\')")
+    cursor.execute("""INSERT INTO address (district, street, city, zipcode, address_state) VALUES (%s, %s, %s, %s, %s)""", [str(district),street,city,zipcode,address_state])
     mydb.commit()
     response = 1
     #TODO: if any errors, return 0
@@ -78,7 +73,8 @@ def upload_addr():
 def remove_addr():
     #send a pip to remove address
     district = request.get_json().get("district")
-
+    #not functional yet
+    #TODO: accss DB and chck for address, remove where =
     response = True
     return jsonify({"data": response})
 

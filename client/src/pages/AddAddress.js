@@ -16,6 +16,7 @@ const AddAddress = () => {
     const [adState, setAdState] = useState("");
     const [file, setFile] = useState("No file chosen");
     const [fileData, setFileData] = useState(null);
+    let oldDistr = -1;
 
 
     const districts = [1, 2, 3, 4, 5];
@@ -51,13 +52,18 @@ const AddAddress = () => {
             width: 100
         },
     ];
-
+    useEffect(() => {
+        if(oldDistr !== district) {
+            fetchAddr()
+            oldDistr = district
+        }
+    }, [district]);
 
     function formatAddr(e){
         let newRows = []
         for(let i = 0; i < e.length; i++){
             let row = e[i]
-            //TODO: replace ditr number with call for distr name
+            //TODO: replace distr number with call for distr name
             newRows.push({id: row[0], district: row[1], street: row[2], city: row[3], zip: row[4], adState: row[5]})
         }
         setAddresses(newRows)
@@ -81,7 +87,7 @@ const AddAddress = () => {
     
             if (!response.ok) throw new Error("Failed to upload address");
     
-            fetchAddr(); 
+            fetchAddr();
         } catch (error) {
             console.error("Error submitting address:", error);
         }
