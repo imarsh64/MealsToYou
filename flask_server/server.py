@@ -6,11 +6,11 @@ app = Flask(__name__)
 
 
 mydb = mysql.connector.connect(
-  host="",
-  port="",
-  database="",
-  user="",
-  password= ""
+  host="127.0.0.1",
+  port="3307",
+  database="mydatabase",
+  user="root",
+  password= "chas"
 )
 
 
@@ -48,6 +48,14 @@ def get_addr():
     #print(result)
     return jsonify({"data": result})
 
+@app.route("/get_all_addr", methods = ['GET'])
+def get_all_addr():
+    #get list of all addresses 
+    cursor = mydb.cursor()
+    cursor.execute("""SELECT * FROM address """)
+    result = cursor.fetchall()
+    return jsonify({"data": result})
+
 
 @app.route("/upload_addr", methods = ['POST'])
 def upload_addr():
@@ -69,13 +77,24 @@ def upload_addr():
     return jsonify({"data": response})
 
 
-@app.route("/remove_addr", methods = ['POST'])
+@app.route("/delete_addr", methods = ['DELETE'])
 def remove_addr():
     #send a pip to remove address
-    district = request.get_json().get("district")
-    #not functional yet
-    #TODO: accss DB and chck for address, remove where =
-    response = True
+    content = request.get_json()
+    id = content.get("id")
+
+    #data validation, throw error if empty fields
+    if not (id):
+        return jsonify({"error": "Missing id"}), 400
+    
+    #query executes
+    cursor = mydb.cursor()
+    cursor.execute(
+        """DELETE FROM address WHERE id=%s""", (id,)
+    )
+    mydb.commit()
+
+    response = 1
     return jsonify({"data": response})
 
 

@@ -5,6 +5,9 @@ import Sidebar from "../components/sidebar";
 import "../styles/addAddress.css";
 import { DataGrid , GridColDef } from '@mui/x-data-grid';
 
+import { IconButton } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 const AddAddress = () => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -19,7 +22,7 @@ const AddAddress = () => {
     let oldDistr = -1;
 
 
-    const districts = [1, 2, 3, 4, 5];
+    const districts = ["All", 1, 2, 3, 4, 5];
     const states = ["TX", "LA", "OK", "NM"];
 
     const columns: GridColDef<>[] = [
@@ -51,12 +54,29 @@ const AddAddress = () => {
             //sortable: false,
             width: 100
         },
+        {
+            field: "delete",
+            headerName: "Delete",
+            width: 80,
+            sortable: false,
+            renderCell: (params) => (
+                <IconButton onClick={() => removeAddress(params.row.id)} color="error">
+                    <DeleteIcon />
+                </IconButton>
+            ),
+        },
     ];
+
+    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+    
+    // immediately fetch and display addresses on page load
     useEffect(() => {
-        if(oldDistr !== district) {
-            fetchAddr()
-            oldDistr = district
-        }
+        fetchAddr(); 
+    }, []);
+        
+    useEffect(() => {
+        fetchAddr();
+        oldDistr = district;
     }, [district]);
 
     function formatAddr(e){
@@ -94,11 +114,35 @@ const AddAddress = () => {
     }
 
     async function fetchAddr() {
+        if(district == "All" || district == undefined){
+            fetchAllAddr();
+        }
+        else{
+            try {
+                const response = await fetch("/get_addr", {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ district })
+                });
+        
+                if (!response.ok) throw new Error("Failed to fetch addresses");
+        
+                const result = await response.json();
+                console.log(result.data);
+                formatAddr(result.data);
+            } catch (error) {
+                console.error("Error fetching addresses:", error);
+            }
+        }
+
+    }
+
+    async function fetchAllAddr() {
         try {
-            const response = await fetch("/get_addr", {
-                method: 'POST',
+            const response = await fetch("/get_all_addr", {
+                method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ district })
+                body: JSON.stringify
             });
         
             if (!response.ok) throw new Error("Failed to fetch addresses");
@@ -110,13 +154,28 @@ const AddAddress = () => {
             console.error("Error fetching addresses:", error);
         }
     }
+    
 
-    const toggleSidebar = () => setIsSidebarOpen(!isSidebarOpen);
 
-    // immediately fetch and display addresses on page load
-    useEffect(() => {
-        fetchAddr(); 
-    }, []);
+
+    async function removeAddress(id) {
+        if (!window.confirm("Are you sure you want to delete this address?")) return;
+    
+        try {
+            const response = await fetch("/delete_addr", {
+                method: "DELETE",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ id }),
+            });
+    
+            if (!response.ok) throw new Error("Failed to delete address");
+    
+            // Refresh addresses after deletion
+            fetchAddr();
+        } catch (error) {
+            console.error("Error deleting address:", error);
+        }
+    }
 
 
     const handleFileChange = (event) => {
