@@ -3,6 +3,7 @@ import mysql.connector
 from flask import Flask
 
 from flask_server.maps import get_osrm_route, generate_google_maps_link
+from flask_server.tsp import make_distance_matrix, genetic_tsp
 
 app = Flask(__name__)
 
@@ -22,11 +23,15 @@ def route(district):
     cursor = mydb.cursor()
     query = "SELECT latitude, longitude FROM address WHERE district = %s"
     params = district
+
     cursor.execute(query, (params,))
     addresses = cursor.fetchall()
-    # address_flipped = [tuple(reversed(tup)) for tup in addresses]
-    ordered = get_osrm_route(addresses)
-    return generate_google_maps_link(*ordered) # generate_google_maps_link(*[list(tup) for tup in address_flipped])
+    addresses = [(float(row[0]), float(row[1])) for row in addresses]
+
+    tsp = genetic_tsp(addresses)
+
+    ordered = [addresses[i] for i in tsp]
+    return generate_google_maps_link(*ordered)
 
 
 if __name__ == "__main__":
