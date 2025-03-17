@@ -19,6 +19,7 @@ const AddAddress = () => {
     const [adState, setAdState] = useState("");
     const [file, setFile] = useState("No file chosen");
     const [fileData, setFileData] = useState(null);
+    const [formDistrict, setFormDistrict] = useState ("All");
     let oldDistr = -1;
 
 
@@ -76,8 +77,8 @@ const AddAddress = () => {
         
     useEffect(() => {
         fetchAddr();
-        oldDistr = district;
-    }, [district]);
+        oldDistr = formDistrict;
+    }, [formDistrict]);
 
     function formatAddr(e){
         let newRows = []
@@ -113,16 +114,35 @@ const AddAddress = () => {
         }
     }
 
+
     async function fetchAddr() {
-        if(district == "All" || district == undefined){
+        const url = formDistrict === "All" || formDistrict === undefined
+            ? "/get_all_addr"
+            : `/get_addr?district=${formDistrict}`;
+    
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error("Failed to fetch addresses");
+    
+            const result = await response.json();
+            console.log(result.data);
+            formatAddr(result.data);
+        } catch (error) {
+            console.error("Error fetching addresses:", error);
+        }
+    }
+    
+
+/*
+    async function fetchAddr() {
+        if(district === "All" || district === undefined){
             fetchAllAddr();
         }
         else{
             try {
                 const response = await fetch("/get_addr", {
-                    method: 'POST',
+                    method: 'GET',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ district })
                 });
         
                 if (!response.ok) throw new Error("Failed to fetch addresses");
@@ -135,14 +155,13 @@ const AddAddress = () => {
             }
         }
 
-    }
+    }*/
 
     async function fetchAllAddr() {
         try {
             const response = await fetch("/get_all_addr", {
                 method: 'GET',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify
             });
         
             if (!response.ok) throw new Error("Failed to fetch addresses");
@@ -154,9 +173,6 @@ const AddAddress = () => {
             console.error("Error fetching addresses:", error);
         }
     }
-    
-
-
 
     async function removeAddress(id) {
         if (!window.confirm("Are you sure you want to delete this address?")) return;
@@ -176,7 +192,6 @@ const AddAddress = () => {
             console.error("Error deleting address:", error);
         }
     }
-
 
     const handleFileChange = (event) => {
         //setFile(event.target.files[0]);
@@ -332,7 +347,7 @@ const AddAddress = () => {
                         <label htmlFor="district">District</label>
                         <select id="district" value={district} onChange={(e) => setDistrict(Number(e.target.value))} required>
                             <option value="">Select</option>
-                            {districts.map((dist, index) => (
+                            {districts.filter(dist => dist !== "All").map((dist, index) => (
                                 <option key={index} value={dist}>{dist}</option>
                             ))}
                         </select>
@@ -349,6 +364,13 @@ const AddAddress = () => {
                 </div>
 
                 <h2> Addresses</h2>
+
+                <label htmlFor="formDistrict">District</label>
+                        <select id="formDistrict" value={formDistrict} onChange={(e) => setFormDistrict(e.target.value)}>                            
+                            {districts.map((dist, index) => (
+                                <option key={index} value={dist}>{dist}</option>
+                            ))}
+                </select>
 
                 <div>
                 <DataGrid

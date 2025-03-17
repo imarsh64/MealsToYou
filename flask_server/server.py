@@ -35,13 +35,10 @@ def login():
     return jsonify({"data": response})
 
 
-@app.route("/get_addr", methods = ['POST'])
+@app.route("/get_addr", methods = ['GET'])
 def get_addr():
     #get list of addresses based on district
-    #parse
-    district = request.get_json().get("district")
-    #district = 1
-    #print(district)
+    district = request.args.get('district')
     cursor = mydb.cursor()
     cursor.execute("""SELECT * FROM address WHERE district=%s""", [str(district)])
     result = cursor.fetchall()
