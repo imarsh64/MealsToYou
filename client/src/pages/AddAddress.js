@@ -3,16 +3,21 @@ import React, { useState, useEffect } from "react";
 import Header from '../components/header.js';
 import Sidebar from "../components/sidebar";
 import "../styles/addAddress.css";
+import EditAddress from "../components/editAddress.js";
 import { DataGrid , GridColDef } from '@mui/x-data-grid';
 
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 const AddAddress = () => {
 
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [addresses, setAddresses] = useState([])
-    const [district, setDistrict] = useState();
+    const [district, setDistrict] = useState("");
     const [street, setStreet] = useState("");
     const [city, setCity] = useState("");
     const [zip, setZip] = useState("");
@@ -20,6 +25,7 @@ const AddAddress = () => {
     const [file, setFile] = useState("No file chosen");
     const [fileData, setFileData] = useState(null);
     const [formDistrict, setFormDistrict] = useState ("All");
+
     let oldDistr = -1;
 
 
@@ -28,7 +34,20 @@ const AddAddress = () => {
 
     const columns: GridColDef<>[] = [
 
-        { field: 'district', headerName: 'District', width: 130 },
+        {
+            field: "edit",
+            headerName: "Edit",
+            width: 80,
+            sortable: false,
+            renderCell: (params) => (
+                <EditAddress address={params.row} onClose={fetchAddr}/>
+            ),
+        },
+        { 
+            field: 'district', 
+            headerName: 'District', 
+            width: 130 
+        },
         {
             field: 'street',
             headerName: 'Street',
@@ -75,9 +94,12 @@ const AddAddress = () => {
         fetchAddr(); 
     }, []);
         
+    
     useEffect(() => {
-        fetchAddr();
-        oldDistr = formDistrict;
+        if( oldDistr !== formDistrict){
+            fetchAddr();
+            oldDistr = formDistrict;
+        }
     }, [formDistrict]);
 
     function formatAddr(e){
@@ -109,6 +131,7 @@ const AddAddress = () => {
             if (!response.ok) throw new Error("Failed to upload address");
     
             fetchAddr();
+            clearFormValues();
         } catch (error) {
             console.error("Error submitting address:", error);
         }
@@ -131,46 +154,30 @@ const AddAddress = () => {
             console.error("Error fetching addresses:", error);
         }
     }
+
+    function clearFormValues() {
+ 
+        setDistrict("");
+        setStreet("");
+        setCity("");
+        setZip("");
+        setAdState("");
+    }
     
 
-/*
-    async function fetchAddr() {
-        if(district === "All" || district === undefined){
-            fetchAllAddr();
-        }
-        else{
-            try {
-                const response = await fetch("/get_addr", {
-                    method: 'GET',
-                    headers: { 'Content-Type': 'application/json' },
-                });
-        
-                if (!response.ok) throw new Error("Failed to fetch addresses");
-        
-                const result = await response.json();
-                console.log(result.data);
-                formatAddr(result.data);
-            } catch (error) {
-                console.error("Error fetching addresses:", error);
-            }
-        }
+    async function editAddress(id) {
 
-    }*/
+        const url = `/edit_addr?id=${id}&district=${district}&street=${street}&zip${zip}&city${city}&state${adState}`;
 
-    async function fetchAllAddr() {
         try {
-            const response = await fetch("/get_all_addr", {
-                method: 'GET',
-                headers: { 'Content-Type': 'application/json' },
-            });
-        
-            if (!response.ok) throw new Error("Failed to fetch addresses");
-        
-            const result = await response.json();
-            console.log(result.data);
-            formatAddr(result.data);
+            const response = await fetch(url);
+
+            if (!response.ok) throw new Error("Failed to edit address");
+    
+            fetchAddr();
+            clearFormValues();
         } catch (error) {
-            console.error("Error fetching addresses:", error);
+            console.error("Error editing address:", error);
         }
     }
 

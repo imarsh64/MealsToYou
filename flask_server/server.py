@@ -53,6 +53,15 @@ def get_all_addr():
     result = cursor.fetchall()
     return jsonify({"data": result})
 
+@app.route("/get_addr_byId", methods = ['GET'])
+def get_addr_byId():
+    #get single address by its id
+    id = request.args.get('id')
+    cursor = mydb.cursor()
+    cursor.execute("""SELECT * FROM address WHERE id = '%s'""", [id])
+    result = cursor.fetchall()
+    return jsonify({"data": result})
+
 
 @app.route("/upload_addr", methods = ['POST'])
 def upload_addr():
@@ -93,6 +102,40 @@ def remove_addr():
 
     response = 1
     return jsonify({"data": response})
+
+@app.route("/edit_addr", methods = ['PATCH'])
+def edit_route():
+
+    id = request.args.get('id')
+    district = request.args.get('district')
+    street = request.args.get('street')
+    zip_code = request.args.get('zip')
+    city = request.args.get('city')
+    state = request.args.get('state')
+    
+    if not id:
+        return jsonify({"error": "ID is required"}), 400
+
+    cursor = mydb.cursor()
+    sql = """UPDATE address 
+                   SET district = %s,
+                   street = %s,
+                   city = %s,
+                   zipcode = %s,
+                   address_state = %s
+                   WHERE id=%s"""
+    
+    values = (district, street, city, zip_code, state, id)
+    try:
+        cursor.execute(sql, values)
+        mydb.commit()
+        response = {"message": "Address updated successfully"}
+    except Exception as e:
+        response = {"error": str(e)}
+    finally:
+        cursor.close()
+
+    return jsonify(response)
 
 
 @app.route("/get_route", methods = ['GET'])
