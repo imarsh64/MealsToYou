@@ -76,7 +76,7 @@ def upload_addr():
     address_state = content.get("state")
     #data validation, throw error if empty fields
     cursor = mydb.cursor()
-    cursor.execute("""INSERT INTO address (district, street, city, zipcode, address_state) VALUES (%s, %s, %s, %s, %s)""", [str(district),street,city,zipcode,address_state])
+    cursor.execute("""INSERT INTO address (district, street, city, zipcode, address_state) VALUES (%s, %s, %s, %s, %s)""", [int(district),street,city,zipcode,address_state])
     mydb.commit()
     response = 1
     #TODO: if any errors, return 0

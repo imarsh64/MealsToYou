@@ -12,7 +12,7 @@ const EditAddress = ({ address , onClose}) => {
   const [district, setDistrict] = useState(address.district);
 
   const states = ["TX", "LA", "OK", "NM"];
-  const districts = [1, 2, 3, 4, 5];
+  const districts = [1, 2, 3, 4];
 
   const handleSubmit = async (event, close) => {
     event.preventDefault();

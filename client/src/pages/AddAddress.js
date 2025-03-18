@@ -8,10 +8,7 @@ import { DataGrid , GridColDef } from '@mui/x-data-grid';
 
 import { IconButton } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
-
-import Popup from 'reactjs-popup';
-import 'reactjs-popup/dist/index.css';
+import CSVFileUpload from "../components/csvFileUpload.js";
 
 const AddAddress = () => {
 
@@ -29,7 +26,7 @@ const AddAddress = () => {
     let oldDistr = -1;
 
 
-    const districts = ["All", 1, 2, 3, 4, 5];
+    const districts = ["All", "1", "2", "3", "4"];
     const states = ["TX", "LA", "OK", "NM"];
 
     const columns: GridColDef<>[] = [
@@ -352,7 +349,7 @@ const AddAddress = () => {
                         </select>
 
                         <label htmlFor="district">District</label>
-                        <select id="district" value={district} onChange={(e) => setDistrict(Number(e.target.value))} required>
+                        <select id="district" value={district} onChange={(e) => setDistrict(e.target.value)} required>
                             <option value="">Select</option>
                             {districts.filter(dist => dist !== "All").map((dist, index) => (
                                 <option key={index} value={dist}>{dist}</option>
@@ -364,10 +361,7 @@ const AddAddress = () => {
                 </div>
 
                 <div>
-                    <form id="upload-form" onSubmit={handleFileSubmit}>
-                        <input type="file" accept=".csv" onChange={handleFileChange}/>
-                        <button type="submit" disabled={!file}>Upload CSV</button>
-                    </form>
+                    <CSVFileUpload onUpload={fetchAddr}/>
                 </div>
 
                 <h2> Addresses</h2>
