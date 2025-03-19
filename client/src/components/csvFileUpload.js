@@ -27,16 +27,6 @@ const CSVFileUpload = ({ onUpload }) => {
       console.log("No file uploaded or file is empty.");
       return;
     }
-
-    // Process CSV content
-    /*
-    const rows = fileContent
-      .split("\n")
-      //.map(row => row.split("\t").map(item => item.trim().replace(/^"|"$/g, "")))  // Remove leading and trailing quotes
-      .map(row => row.split("\t").map(item => item.trim()))  // Remove leading and trailing quotes
-      .filter(row => row.length >= 5);*/
-
-      // Check for tab-separated values (\t) instead of commas
     const delimiter = fileContent.includes("\t") ? "\t" : ",";
   
     const rows = fileContent

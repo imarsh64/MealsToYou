@@ -1,22 +1,45 @@
 import mysql
+<<<<<<< HEAD
 from flask import Flask, jsonify, request
 import mysql.connector
+=======
+import mysql.connector
+from flask import Flask
+>>>>>>> f5cfaf4d2999868b456c3a644ba5a6216ccf3e1a
+
+from flask_server.maps import generate_google_maps_link
+from flask_server.tsp import make_distance_matrix, genetic_tsp
 
 app = Flask(__name__)
 
 
-mydb = mysql.connector.connect(
-  host="127.0.0.1",
-  port="3307",
-  database="mydatabase",
-  user="root",
-  password= "chas"
-)
 
+mydb = mysql.connector.connect(
+  host="",
+  port="",
+  database="",
+  user="",
+  password= ""
+)
 
 @app.route("/hi")
 def hi():
     return {"hi": ["howdy","helloge!"]}
+
+@app.route("/route/<district>")
+def route(district):
+    cursor = mydb.cursor()
+    query = "SELECT latitude, longitude FROM address WHERE district = %s"
+    params = district
+
+    cursor.execute(query, (params,))
+    addresses = cursor.fetchall()
+    addresses = [(float(row[0]), float(row[1])) for row in addresses]
+
+    tsp = genetic_tsp(addresses)
+
+    ordered = [addresses[i] for i in tsp]
+    return generate_google_maps_link(*ordered)
 
 
 @app.route("/login", methods = ['POST'])
