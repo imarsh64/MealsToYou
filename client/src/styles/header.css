@@ -11,6 +11,10 @@
     padding: 0;
 }
 
+#bottom{
+    clear:both
+}
+
 .logo {
     transition: transform 0.2s ease-in-out, color 0.2s ease-in-out;
     text-decoration: none;
