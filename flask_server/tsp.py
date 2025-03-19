@@ -10,8 +10,8 @@ def make_distance_matrix(coordinates):
     request_url = f"{OSRM_URL}{coord_string}"
     response = requests.get(request_url)
 
-    # if response.status_code != 200:
-    #     # TODO: Error
+    if response.status_code != 200:
+        raise Exception(f"OSRM request failed with status code {response.status_code}")
 
     data = response.json()
     distance_matrix = data["durations"]
@@ -62,7 +62,10 @@ def two_opt(route, distance_matrix):
     return best
 
 def genetic_tsp(coordinates, population_size=100, generations=500, mutation_rate=0.1):
-    distance_matrix = make_distance_matrix(coordinates)
+    try:
+        distance_matrix = make_distance_matrix(coordinates)
+    except:
+        raise Exception(f"Could not generate distance matrix")
     num_stops = len(distance_matrix)
     population = create_initial_population(population_size, num_stops)
 

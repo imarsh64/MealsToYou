@@ -1,6 +1,6 @@
 import mysql
 import mysql.connector
-from flask import Flask
+from flask import Flask, jsonify
 
 from flask_server.maps import generate_google_maps_link
 from flask_server.tsp import make_distance_matrix, genetic_tsp
@@ -28,7 +28,10 @@ def route(district):
     addresses = cursor.fetchall()
     addresses = [(float(row[0]), float(row[1])) for row in addresses]
 
-    tsp = genetic_tsp(addresses)
+    try:
+        tsp = genetic_tsp(addresses)
+    except:
+        return jsonify("OSRM issue"), 400
 
     ordered = [addresses[i] for i in tsp]
     return generate_google_maps_link(*ordered)
