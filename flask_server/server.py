@@ -1,11 +1,7 @@
 import mysql
-<<<<<<< HEAD
 from flask import Flask, jsonify, request
 import mysql.connector
-=======
-import mysql.connector
-from flask import Flask
->>>>>>> f5cfaf4d2999868b456c3a644ba5a6216ccf3e1a
+
 
 from flask_server.maps import generate_google_maps_link
 from flask_server.tsp import make_distance_matrix, genetic_tsp
