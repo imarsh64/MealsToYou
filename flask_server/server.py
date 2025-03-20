@@ -3,19 +3,20 @@ from flask import Flask, jsonify, request
 import mysql.connector
 
 
-from flask_server.maps import generate_google_maps_link
-from flask_server.tsp import make_distance_matrix, genetic_tsp
+#from flask_server.maps import generate_google_maps_link
+from maps import generate_google_maps_link
+#from flask_server.tsp import make_distance_matrix, genetic_tsp
 
 app = Flask(__name__)
 
 
 
 mydb = mysql.connector.connect(
-  host="",
-  port="",
-  database="",
-  user="",
-  password= ""
+  host="127.0.0.1",
+  port="3307",
+  database="mydatabase",
+  user="root",
+  password= "chas"
 )
 
 @app.route("/hi")

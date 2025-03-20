@@ -4,6 +4,7 @@ import Home from "./pages/Home.js";
 import Cost from "./pages/CostAnalysis.js"
 import Login from "./pages/Login.js"
 import AddAddress from "./pages/AddAddress";
+import RouteEditor from './pages/RouteEditor.js';
 function App(){
 
     const [data, setData] = useState([{}])
@@ -31,6 +32,9 @@ function App(){
 
                 {/* Home Page Route */}
                 <Route path="/" element={<Home />} />
+                
+                {/* Route Page Route */}
+                <Route path="/Routes" element={<RouteEditor />} />
 
                 {/* Profile Page Route */}
                 <Route path="/Profile" element={<Home />} />
